@@ -62,6 +62,8 @@ class PackageRubyBundlePlugin {
   beforePackage(){
     this.warnOnUnsupportedRuntime();
 
+    const localPath = this.serverless.config.servicePath;
+    const dockerImage = this.dockerImage();
     const gemRoot = `vendor/bundle/ruby/${this.rubyVersion()}`;
     const extensionDir = `${gemRoot}/extensions/x86_64-linux/${this.extensionApiVersion()}`;
 
@@ -85,10 +87,12 @@ class PackageRubyBundlePlugin {
     this.serverless.service.package.include.push("vendor/bundle/bundler/**"); // bundler standalone files
 
     const gemFilePath = path.join(this.serverless.config.servicePath, "Gemfile");
+    this.log(`localPath is ${localPath}`)
+    this.log(`gemFilePath is ${gemFilePath}`)
     const bundleEnv = Object.assign({
       "BUNDLE_GEMFILE": gemFilePath
     }, process.env);
-    const output = execSync("bundle exec ruby", {input: identifyGemsScript, env: bundleEnv});
+    const output = execSync(`docker run --rm -i -v "${localPath}:/var/task" -e "BUNDLE_GEMFILE=/var/task/Gemfile" ${dockerImage} bundle exec ruby`, {input: identifyGemsScript});
     const gems = JSON.parse(output)
 
     if (gems.some(x=>x.extensions)){
