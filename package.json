@@ -1,7 +1,7 @@
 {
   "name": "serverless-ruby-package",
   "repository": "https://github.com/joshuaflanagan/serverless-ruby-package",
-  "version": "1.4.0",
+  "version": "3.2.0",
   "description": "serverless plugin to package ruby gems",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,12 @@
   },
   "author": "Joshua Flanagan",
   "license": "MIT",
+  "files": [
+    "index.js",
+    "build-gems.sh"
+  ],
   "devDependencies": {
-    "jest": "^24.5.0"
+    "jest": "^24.5.0",
+    "serverless": "^3.33.0"
   }
 }

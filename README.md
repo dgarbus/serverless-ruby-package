@@ -125,18 +125,6 @@ environment variable, it will have precedence over the `serverless.yml` file:
 CROSS_COMPILE_EXTENSIONS=false serverless package
 ```
 
-By default, native extensions will be built using the lambci/lambda:build-ruby2.5
-docker image, which should accurately reflect the AWS Lambda ruby environment.
-To use a different image, override it in your `serverless.yml` file:
-
-```
-custom:
-  rubyPackage:
-    dockerImage: lambci/lambda:build-ruby2.7
-```
-
-
-
 ## Development
 
 To work on this plugin, you should first run the following in your local directory:
@@ -146,16 +134,25 @@ To work on this plugin, you should first run the following in your local directo
 
 yarn test               # run the automated test suite
 
-./integration_test.sh   # run serverless package on the demo project and observe the results
+./integration-test.sh   # run serverless package on the demo project and observe the results
 ```
 
 ### Troubleshooting the demo_service
 
 * Make sure the version of bundler specified in the demo_service Gemfile.lock
-is compatible with the version installed in the lambci/lambda:build-ruby2.5 image.
+is compatible with the version installed in the `amazon/aws-lambda-ruby:3.2`
+image.
 
 * Make sure you can invoke the function n in the docker image:
 
 ```
 ./invoke-service.sh
 ```
+
+### Releasing a new version
+
+* Commit a description of the changes in CHANGELOG.md
+
+* Run `yarn publish`. It will prompt for the new version number, and npm credentials.
+It will create a new commit and tag with the version number changes. Make sure
+to push them.
